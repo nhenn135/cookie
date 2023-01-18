@@ -10,3 +10,5 @@ min_length = 12
 max_length = 12
 password = "".join(choice(chars) for x in range(randint(min_length, max_length)))
 print(password)
+
+#feel free to do changes
