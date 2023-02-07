@@ -1,0 +1,13 @@
+class Dog:
+  def __init__(self, name, color):
+    self.name = name
+    self.color = color
+
+  def bark(self):
+    print("Woof!")
+
+mushu = Dog("Mushu", "white and black")
+print(mushu.name)
+mushu.bark()
+
+#dog
