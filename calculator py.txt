@@ -1,0 +1,22 @@
+num1 = int(input(" "))
+operator = input(" ")
+num2 = int(input(" "))
+
+if operator == "+":
+    print(num1+num2)
+
+elif operator == "-":
+    if num1 > num2:
+        print(num1 - num2)
+    else:
+        print(num2 - num1)
+
+elif operator == "*":
+    print(num1 * num2)
+
+elif operator == "/":
+    print(num1 / num2)
+
+#incase in error
+else:
+    print("error")
