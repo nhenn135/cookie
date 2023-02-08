@@ -1,0 +1,14 @@
+print('-'*14+'\nTip Calculator\n'+'-'*14)
+
+bill = float(input())
+try:
+	tip = "."+input()
+except EOFError:
+	tip = .18
+
+tip_amount = round(bill * float(tip))
+total = round(bill + tip_amount,2)
+
+print("Bill:", bill)
+print("Tip:", tip_amount)
+print("Total:", total)
