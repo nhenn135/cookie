@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>game_stats.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+game_stats.py</font>
+</center></td></tr></table>
+<pre><span class="s0">def </span><span class="s1">run_game</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+    <span class="s3">&quot;&quot;&quot;Start the main loop for the game.&quot;&quot;&quot;</span>
+    <span class="s0">while True</span><span class="s2">:</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">_check_events</span><span class="s2">()</span>
+
+        <span class="s0">if </span><span class="s1">self</span><span class="s2">.</span><span class="s1">stats</span><span class="s2">.</span><span class="s1">game_active</span><span class="s2">:</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">ship</span><span class="s2">.</span><span class="s1">update</span><span class="s2">()</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">_update_bullets</span><span class="s2">()</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">_update_aliens</span><span class="s2">()</span>
+
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">_update_screen</span><span class="s2">()</span></pre>
+</body>
+</html>
