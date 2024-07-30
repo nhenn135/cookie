@@ -1,0 +1,194 @@
+<html>
+<head>
+<title>test.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #7a7e85;}
+.s5 { color: #2aacb8;}
+.s6 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+test.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">sys</span>
+<span class="s0">from </span><span class="s1">time </span><span class="s0">import </span><span class="s1">sleep</span>
+
+<span class="s0">import </span><span class="s1">pygame</span>
+
+<span class="s0">from </span><span class="s1">settings </span><span class="s0">import </span><span class="s1">Settings</span>
+<span class="s0">from </span><span class="s1">game_stats </span><span class="s0">import </span><span class="s1">GameStats</span>
+<span class="s0">from </span><span class="s1">ship </span><span class="s0">import </span><span class="s1">Ship</span>
+<span class="s0">from </span><span class="s1">bullet </span><span class="s0">import </span><span class="s1">Bullet</span>
+<span class="s0">from </span><span class="s1">alien </span><span class="s0">import </span><span class="s1">Alien</span>
+
+
+<span class="s0">class </span><span class="s1">AlienInvasion</span><span class="s2">:</span>
+    <span class="s3">&quot;&quot;&quot;Overall class to manage game assets and behavior.&quot;&quot;&quot;</span>
+
+    <span class="s0">def </span><span class="s1">_check_events</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot;Respond to keypresses and mouse events.&quot;&quot;&quot;</span>
+        <span class="s0">for </span><span class="s1">event </span><span class="s0">in </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">event</span><span class="s2">.</span><span class="s1">get</span><span class="s2">():</span>
+            <span class="s0">if </span><span class="s1">event</span><span class="s2">.</span><span class="s1">type </span><span class="s2">== </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">QUIT</span><span class="s2">:</span>
+                <span class="s1">sys</span><span class="s2">.</span><span class="s1">exit</span><span class="s2">()</span>
+            <span class="s0">elif </span><span class="s1">event</span><span class="s2">.</span><span class="s1">type </span><span class="s2">== </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">KEYDOWN</span><span class="s2">:</span>
+                <span class="s1">self</span><span class="s2">.</span><span class="s1">_check_keydown_events</span><span class="s2">(</span><span class="s1">event</span><span class="s2">)</span>
+            <span class="s0">elif </span><span class="s1">event</span><span class="s2">.</span><span class="s1">type </span><span class="s2">== </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">KEYUP</span><span class="s2">:</span>
+                <span class="s1">self</span><span class="s2">.</span><span class="s1">_check_keyup_events</span><span class="s2">(</span><span class="s1">event</span><span class="s2">)</span>
+
+    <span class="s0">def </span><span class="s1">_check_keydown_events</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">event</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot;Respond to keypresses.&quot;&quot;&quot;</span>
+        <span class="s0">if </span><span class="s1">event</span><span class="s2">.</span><span class="s1">key </span><span class="s2">== </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">K_RIGHT</span><span class="s2">:</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">ship</span><span class="s2">.</span><span class="s1">moving_right </span><span class="s2">= </span><span class="s0">True</span>
+        <span class="s0">elif </span><span class="s1">event</span><span class="s2">.</span><span class="s1">key </span><span class="s2">== </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">K_LEFT</span><span class="s2">:</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">ship</span><span class="s2">.</span><span class="s1">moving_left </span><span class="s2">= </span><span class="s0">True</span>
+        <span class="s0">elif </span><span class="s1">event</span><span class="s2">.</span><span class="s1">key </span><span class="s2">== </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">K_q</span><span class="s2">:</span>
+            <span class="s1">sys</span><span class="s2">.</span><span class="s1">exit</span><span class="s2">()</span>
+        <span class="s0">elif </span><span class="s1">event</span><span class="s2">.</span><span class="s1">key </span><span class="s2">== </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">K_SPACE</span><span class="s2">:</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">_fire_bullet</span><span class="s2">()</span>
+
+    <span class="s0">def </span><span class="s1">_check_keyup_events</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">event</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot;Respond to key releases.&quot;&quot;&quot;</span>
+        <span class="s0">if </span><span class="s1">event</span><span class="s2">.</span><span class="s1">key </span><span class="s2">== </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">K_RIGHT</span><span class="s2">:</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">ship</span><span class="s2">.</span><span class="s1">moving_right </span><span class="s2">= </span><span class="s0">False</span>
+        <span class="s0">elif </span><span class="s1">event</span><span class="s2">.</span><span class="s1">key </span><span class="s2">== </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">K_LEFT</span><span class="s2">:</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">ship</span><span class="s2">.</span><span class="s1">moving_left </span><span class="s2">= </span><span class="s0">False</span>
+
+    <span class="s0">def </span><span class="s1">_fire_bullet</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot;Create a new bullet and add it to the bullets group.&quot;&quot;&quot;</span>
+        <span class="s0">if </span><span class="s1">len</span><span class="s2">(</span><span class="s1">self</span><span class="s2">.</span><span class="s1">bullets</span><span class="s2">) &lt; </span><span class="s1">self</span><span class="s2">.</span><span class="s1">settings</span><span class="s2">.</span><span class="s1">bullets_allowed</span><span class="s2">:</span>
+            <span class="s1">new_bullet </span><span class="s2">= </span><span class="s1">Bullet</span><span class="s2">(</span><span class="s1">self</span><span class="s2">)</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">bullets</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">new_bullet</span><span class="s2">)</span>
+
+    <span class="s0">def </span><span class="s1">_update_bullets</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot;Update position of bullets and get rid of old bullets.&quot;&quot;&quot;</span>
+        <span class="s4"># Update bullet positions.</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">bullets</span><span class="s2">.</span><span class="s1">update</span><span class="s2">()</span>
+
+        <span class="s4"># Get rid of bullets that have disappeared.</span>
+        <span class="s0">for </span><span class="s1">bullet </span><span class="s0">in </span><span class="s1">self</span><span class="s2">.</span><span class="s1">bullets</span><span class="s2">.</span><span class="s1">copy</span><span class="s2">():</span>
+            <span class="s0">if </span><span class="s1">bullet</span><span class="s2">.</span><span class="s1">rect</span><span class="s2">.</span><span class="s1">bottom </span><span class="s2">&lt;= </span><span class="s5">0</span><span class="s2">:</span>
+                <span class="s1">self</span><span class="s2">.</span><span class="s1">bullets</span><span class="s2">.</span><span class="s1">remove</span><span class="s2">(</span><span class="s1">bullet</span><span class="s2">)</span>
+
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">_check_bullet_alien_collisions</span><span class="s2">()</span>
+
+    <span class="s0">def </span><span class="s1">_check_bullet_alien_collisions</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot;Respond to bullet-alien collisions.&quot;&quot;&quot;</span>
+        <span class="s4"># Remove any bullets and aliens that have collided.</span>
+        <span class="s1">collisions </span><span class="s2">= </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">sprite</span><span class="s2">.</span><span class="s1">groupcollide</span><span class="s2">(</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">bullets</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">aliens</span><span class="s2">, </span><span class="s0">True</span><span class="s2">, </span><span class="s0">True</span><span class="s2">)</span>
+
+        <span class="s0">if not </span><span class="s1">self</span><span class="s2">.</span><span class="s1">aliens</span><span class="s2">:</span>
+            <span class="s4"># Destroy existing bullets and create new fleet.</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">bullets</span><span class="s2">.</span><span class="s1">empty</span><span class="s2">()</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">_create_fleet</span><span class="s2">()</span>
+
+    <span class="s0">def </span><span class="s1">_update_aliens</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot; 
+        Check if the fleet is at an edge, 
+          then update the positions of all aliens in the fleet. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">_check_fleet_edges</span><span class="s2">()</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">aliens</span><span class="s2">.</span><span class="s1">update</span><span class="s2">()</span>
+
+        <span class="s4"># Look for alien-ship collisions.</span>
+        <span class="s0">if </span><span class="s1">pygame</span><span class="s2">.</span><span class="s1">sprite</span><span class="s2">.</span><span class="s1">spritecollideany</span><span class="s2">(</span><span class="s1">self</span><span class="s2">.</span><span class="s1">ship</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">aliens</span><span class="s2">):</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">_ship_hit</span><span class="s2">()</span>
+
+        <span class="s4"># Look for aliens hitting the bottom of the screen.</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">_check_aliens_bottom</span><span class="s2">()</span>
+
+    <span class="s0">def </span><span class="s1">_check_aliens_bottom</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot;Check if any aliens have reached the bottom of the screen.&quot;&quot;&quot;</span>
+        <span class="s1">screen_rect </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">screen</span><span class="s2">.</span><span class="s1">get_rect</span><span class="s2">()</span>
+        <span class="s0">for </span><span class="s1">alien </span><span class="s0">in </span><span class="s1">self</span><span class="s2">.</span><span class="s1">aliens</span><span class="s2">.</span><span class="s1">sprites</span><span class="s2">():</span>
+            <span class="s0">if </span><span class="s1">alien</span><span class="s2">.</span><span class="s1">rect</span><span class="s2">.</span><span class="s1">bottom </span><span class="s2">&gt;= </span><span class="s1">screen_rect</span><span class="s2">.</span><span class="s1">bottom</span><span class="s2">:</span>
+                <span class="s4"># Treat this the same as if the ship got hit.</span>
+                <span class="s1">self</span><span class="s2">.</span><span class="s1">_ship_hit</span><span class="s2">()</span>
+                <span class="s0">break</span>
+
+    <span class="s0">def </span><span class="s1">_ship_hit</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot;Respond to the ship being hit by an alien.&quot;&quot;&quot;</span>
+        <span class="s0">if </span><span class="s1">self</span><span class="s2">.</span><span class="s1">stats</span><span class="s2">.</span><span class="s1">ships_left </span><span class="s2">&gt; </span><span class="s5">0</span><span class="s2">:</span>
+            <span class="s4"># Decrement ships_left.</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">stats</span><span class="s2">.</span><span class="s1">ships_left </span><span class="s2">-= </span><span class="s5">1</span>
+
+            <span class="s4"># Get rid of any remaining aliens and bullets.</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">aliens</span><span class="s2">.</span><span class="s1">empty</span><span class="s2">()</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">bullets</span><span class="s2">.</span><span class="s1">empty</span><span class="s2">()</span>
+
+            <span class="s4"># Create a new fleet and center the ship.</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">_create_fleet</span><span class="s2">()</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">ship</span><span class="s2">.</span><span class="s1">center_ship</span><span class="s2">()</span>
+
+            <span class="s4"># Pause.</span>
+            <span class="s1">sleep</span><span class="s2">(</span><span class="s5">0.5</span><span class="s2">)</span>
+        <span class="s0">else</span><span class="s2">:</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">stats</span><span class="s2">.</span><span class="s1">game_active </span><span class="s2">= </span><span class="s0">False</span>
+
+    <span class="s0">def </span><span class="s1">_create_fleet</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot;Create the fleet of aliens.&quot;&quot;&quot;</span>
+        <span class="s4"># Create an alien and find the number of aliens in a row.</span>
+        <span class="s4"># Spacing between each alien is equal to one alien width.</span>
+        <span class="s1">alien </span><span class="s2">= </span><span class="s1">Alien</span><span class="s2">(</span><span class="s1">self</span><span class="s2">)</span>
+        <span class="s1">alien_width</span><span class="s2">, </span><span class="s1">alien_height </span><span class="s2">= </span><span class="s1">alien</span><span class="s2">.</span><span class="s1">rect</span><span class="s2">.</span><span class="s1">size</span>
+        <span class="s1">available_space_x </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">settings</span><span class="s2">.</span><span class="s1">screen_width </span><span class="s2">- (</span><span class="s5">2 </span><span class="s2">* </span><span class="s1">alien_width</span><span class="s2">)</span>
+        <span class="s1">number_aliens_x </span><span class="s2">= </span><span class="s1">available_space_x </span><span class="s2">// (</span><span class="s5">2 </span><span class="s2">* </span><span class="s1">alien_width</span><span class="s2">)</span>
+
+        <span class="s4"># Determine the number of rows of aliens that fit on the screen.</span>
+        <span class="s1">ship_height </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">ship</span><span class="s2">.</span><span class="s1">rect</span><span class="s2">.</span><span class="s1">height</span>
+        <span class="s1">available_space_y </span><span class="s2">= (</span><span class="s1">self</span><span class="s2">.</span><span class="s1">settings</span><span class="s2">.</span><span class="s1">screen_height </span><span class="s2">-</span>
+                             <span class="s2">(</span><span class="s5">3 </span><span class="s2">* </span><span class="s1">alien_height</span><span class="s2">) - </span><span class="s1">ship_height</span><span class="s2">)</span>
+        <span class="s1">number_rows </span><span class="s2">= </span><span class="s1">available_space_y </span><span class="s2">// (</span><span class="s5">2 </span><span class="s2">* </span><span class="s1">alien_height</span><span class="s2">)</span>
+
+        <span class="s4"># Create the full fleet of aliens.</span>
+        <span class="s0">for </span><span class="s1">row_number </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s1">number_rows</span><span class="s2">):</span>
+            <span class="s0">for </span><span class="s1">alien_number </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s1">number_aliens_x</span><span class="s2">):</span>
+                <span class="s1">self</span><span class="s2">.</span><span class="s1">_create_alien</span><span class="s2">(</span><span class="s1">alien_number</span><span class="s2">, </span><span class="s1">row_number</span><span class="s2">)</span>
+
+    <span class="s0">def </span><span class="s1">_create_alien</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">alien_number</span><span class="s2">, </span><span class="s1">row_number</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot;Create an alien and place it in the row.&quot;&quot;&quot;</span>
+        <span class="s1">alien </span><span class="s2">= </span><span class="s1">Alien</span><span class="s2">(</span><span class="s1">self</span><span class="s2">)</span>
+        <span class="s1">alien_width</span><span class="s2">, </span><span class="s1">alien_height </span><span class="s2">= </span><span class="s1">alien</span><span class="s2">.</span><span class="s1">rect</span><span class="s2">.</span><span class="s1">size</span>
+        <span class="s1">alien</span><span class="s2">.</span><span class="s1">x </span><span class="s2">= </span><span class="s1">alien_width </span><span class="s2">+ </span><span class="s5">2 </span><span class="s2">* </span><span class="s1">alien_width </span><span class="s2">* </span><span class="s1">alien_number</span>
+        <span class="s1">alien</span><span class="s2">.</span><span class="s1">rect</span><span class="s2">.</span><span class="s1">x </span><span class="s2">= </span><span class="s1">alien</span><span class="s2">.</span><span class="s1">x</span>
+        <span class="s1">alien</span><span class="s2">.</span><span class="s1">rect</span><span class="s2">.</span><span class="s1">y </span><span class="s2">= </span><span class="s1">alien</span><span class="s2">.</span><span class="s1">rect</span><span class="s2">.</span><span class="s1">height </span><span class="s2">+ </span><span class="s5">2 </span><span class="s2">* </span><span class="s1">alien</span><span class="s2">.</span><span class="s1">rect</span><span class="s2">.</span><span class="s1">height </span><span class="s2">* </span><span class="s1">row_number</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">aliens</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">alien</span><span class="s2">)</span>
+
+    <span class="s0">def </span><span class="s1">_check_fleet_edges</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot;Respond appropriately if any aliens have reached an edge.&quot;&quot;&quot;</span>
+        <span class="s0">for </span><span class="s1">alien </span><span class="s0">in </span><span class="s1">self</span><span class="s2">.</span><span class="s1">aliens</span><span class="s2">.</span><span class="s1">sprites</span><span class="s2">():</span>
+            <span class="s0">if </span><span class="s1">alien</span><span class="s2">.</span><span class="s1">check_edges</span><span class="s2">():</span>
+                <span class="s1">self</span><span class="s2">.</span><span class="s1">_change_fleet_direction</span><span class="s2">()</span>
+                <span class="s0">break</span>
+
+    <span class="s0">def </span><span class="s1">_change_fleet_direction</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot;Drop the entire fleet and change the fleet's direction.&quot;&quot;&quot;</span>
+        <span class="s0">for </span><span class="s1">alien </span><span class="s0">in </span><span class="s1">self</span><span class="s2">.</span><span class="s1">aliens</span><span class="s2">.</span><span class="s1">sprites</span><span class="s2">():</span>
+            <span class="s1">alien</span><span class="s2">.</span><span class="s1">rect</span><span class="s2">.</span><span class="s1">y </span><span class="s2">+= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">settings</span><span class="s2">.</span><span class="s1">fleet_drop_speed</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">settings</span><span class="s2">.</span><span class="s1">fleet_direction </span><span class="s2">*= -</span><span class="s5">1</span>
+
+    <span class="s0">def </span><span class="s1">_update_screen</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s3">&quot;&quot;&quot;Update images on the screen, and flip to the new screen.&quot;&quot;&quot;</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">screen</span><span class="s2">.</span><span class="s1">fill</span><span class="s2">(</span><span class="s1">self</span><span class="s2">.</span><span class="s1">settings</span><span class="s2">.</span><span class="s1">bg_color</span><span class="s2">)</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">ship</span><span class="s2">.</span><span class="s1">blitme</span><span class="s2">()</span>
+        <span class="s0">for </span><span class="s1">bullet </span><span class="s0">in </span><span class="s1">self</span><span class="s2">.</span><span class="s1">bullets</span><span class="s2">.</span><span class="s1">sprites</span><span class="s2">():</span>
+            <span class="s1">bullet</span><span class="s2">.</span><span class="s1">draw_bullet</span><span class="s2">()</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">aliens</span><span class="s2">.</span><span class="s1">draw</span><span class="s2">(</span><span class="s1">self</span><span class="s2">.</span><span class="s1">screen</span><span class="s2">)</span>
+
+        <span class="s1">pygame</span><span class="s2">.</span><span class="s1">display</span><span class="s2">.</span><span class="s1">flip</span><span class="s2">()</span>
+
+
+<span class="s0">if </span><span class="s1">__name__ </span><span class="s2">== </span><span class="s6">'__main__'</span><span class="s2">:</span>
+    <span class="s4"># Make a game instance, and run the game.</span>
+    <span class="s1">ai </span><span class="s2">= </span><span class="s1">AlienInvasion</span><span class="s2">()</span>
+    <span class="s1">ai</span><span class="s2">.</span><span class="s1">run_game</span><span class="s2">()</span></pre>
+</body>
+</html>
