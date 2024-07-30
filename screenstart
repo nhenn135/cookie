@@ -1,0 +1,25 @@
+import pygame
+#install pygamebefore running
+
+def main() -> object:
+    pygame.init()
+    screen = pygame.display.set_mode((640, 480))
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
+    SCREEN.fill((0,255,255))
+    pygame.display.flip()
+
+
+main()
+
+
+#error Traceback (most recent call last):
+  #File "C:\Users\uberm\PycharmProjects\pythonProject6\Firstgame.py", line 17, in <module>
+   # main()
+  #File "C:\Users\uberm\PycharmProjects\pythonProject6\Firstgame.py", line 9, in main
+   # for event in pygame.event.get():
+#pygame.error: video system not initialized
